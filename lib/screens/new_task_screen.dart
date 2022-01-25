@@ -35,10 +35,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     ),
                   ),
                 ),
-                TextButton(
-                  child: Icon(Icons.mic),
-                  onPressed: () {},
-                ),
+                CustomIconButton(iconData: Icons.mic, onPressed: () {}),
               ],
             ),
             SizedBox(
@@ -56,13 +53,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 Flexible(
                   child: TextField(),
                 ),
-                TextButton(
-                  child: Icon(Icons.calendar_today_outlined),
+                CustomIconButton(
+                  iconData: Icons.calendar_today_outlined,
                   onPressed: () async {
                     var date = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
+                        //TODO::lastDate should be 50/100/x number of years from now
                         lastDate: DateTime(2101));
                   },
                 ),
@@ -71,6 +69,30 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton({
+    required this.iconData,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
+
+  final IconData iconData;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 7),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: Size.zero,
+      ),
+      child: Icon(iconData),
+      onPressed: () {},
     );
   }
 }
