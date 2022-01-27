@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({Key? key}) : super(key: key);
@@ -8,6 +9,9 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
+  DateTime? date = null;
+  TextEditingController dateController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,18 +55,78 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             Row(
               children: [
                 Flexible(
-                  child: TextField(),
+                  child: TextField(
+                    readOnly: true,
+                    controller: dateController,
+                  ),
                 ),
                 CustomIconButton(
                   iconData: Icons.calendar_today_outlined,
                   onPressed: () async {
-                    var date = await showDatePicker(
+                    DateTime? pickedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
+                        initialDate: date == null ? DateTime.now() : date!,
                         firstDate: DateTime.now(),
                         //TODO::lastDate should be 50/100/x number of years from now
                         lastDate: DateTime(2101));
+                    if (pickedDate != null) {
+                      date = pickedDate;
+                      setState(() {});
+                      var dateString =
+                          DateFormat('EEEE, d MMM, yyyy').format(pickedDate);
+                      dateController.text = dateString;
+                    }
                   },
+                ),
+                Visibility(
+                  visible: date == null ? false : true,
+                  child: CustomIconButton(
+                    iconData: Icons.cancel_rounded,
+                    onPressed: () {
+                      date = null;
+                      setState(() {});
+                      dateController.text = "";
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Flexible(
+                  child: TextField(
+                    readOnly: true,
+                    controller: dateController,
+                  ),
+                ),
+                CustomIconButton(
+                  iconData: Icons.calendar_today_outlined,
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: date == null ? DateTime.now() : date!,
+                        firstDate: DateTime.now(),
+                        //TODO::lastDate should be 50/100/x number of years from now
+                        lastDate: DateTime(2101));
+                    if (pickedDate != null) {
+                      date = pickedDate;
+                      setState(() {});
+                      var dateString =
+                          DateFormat('EEEE, d MMM, yyyy').format(pickedDate);
+                      dateController.text = dateString;
+                    }
+                  },
+                ),
+                Visibility(
+                  visible: date == null ? false : true,
+                  child: CustomIconButton(
+                    iconData: Icons.cancel_rounded,
+                    onPressed: () {
+                      date = null;
+                      setState(() {});
+                      dateController.text = "";
+                    },
+                  ),
                 ),
               ],
             ),
@@ -92,7 +156,7 @@ class CustomIconButton extends StatelessWidget {
         minimumSize: Size.zero,
       ),
       child: Icon(iconData),
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 }
