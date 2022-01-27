@@ -15,7 +15,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     "No Repeat",
     "Once a Day",
     "Once a Day(Mon-Fri)",
-    "Once a Week"
+    "Once a Week",
+    "Other",
   ];
   String repetitionFrequency = "No Repeat";
 
@@ -166,10 +167,33 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               items: dropdownItemCreator(options),
               value: repetitionFrequency,
               onChanged: (String? chosenValue) {
-                if (repetitionFrequency == "Other")
-                  repetitionFrequency = chosenValue ?? repetitionFrequency;
-
-                setState(() {});
+                if (chosenValue != null) {
+                  if (chosenValue != options.last) {
+                    //options.last = "Other"
+                    repetitionFrequency = chosenValue;
+                    setState(() {});
+                  } else {
+                    AlertDialog alert = AlertDialog(
+                      content: Text("Content"),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {},
+                        ),
+                        TextButton(
+                          child: Text("Cancel"),
+                          onPressed: () {},
+                        ),
+                      ],
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return alert;
+                      },
+                    );
+                  }
+                }
               },
             ),
           ],
