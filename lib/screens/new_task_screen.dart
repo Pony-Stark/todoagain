@@ -11,6 +11,26 @@ class NewTaskScreen extends StatefulWidget {
 class _NewTaskScreenState extends State<NewTaskScreen> {
   DateTime? date = null;
   TextEditingController dateController = TextEditingController();
+  List<String> options = [
+    "No Repeat",
+    "Once a Day",
+    "Once a Day(Mon-Fri)",
+    "Once a Week"
+  ];
+  String repetitionFrequency = "No Repeat";
+
+  List<DropdownMenuItem<String>> dropdownItemCreator(List<String> itemValues) {
+    List<DropdownMenuItem<String>> dropdownMenuItems = [];
+    for (var i = 0; i < itemValues.length; i++) {
+      dropdownMenuItems.add(
+        DropdownMenuItem<String>(
+          value: itemValues[i],
+          child: Text(itemValues[i]),
+        ),
+      );
+    }
+    return dropdownMenuItems;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +43,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //Task details
             Text(
               "What is to be done?",
               style: TextStyle(
@@ -45,6 +66,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             SizedBox(
               height: 80,
             ),
+
+            //Date Time Input
             Text(
               "Due Date",
               style: TextStyle(
@@ -91,6 +114,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 ),
               ],
             ),
+            //Time Input
             Row(
               children: [
                 Flexible(
@@ -129,6 +153,24 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(height: 60),
+            Text(
+              "Repeat",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            DropdownButton<String>(
+              items: dropdownItemCreator(options),
+              value: repetitionFrequency,
+              onChanged: (String? chosenValue) {
+                if (repetitionFrequency == "Other")
+                  repetitionFrequency = chosenValue ?? repetitionFrequency;
+
+                setState(() {});
+              },
             ),
           ],
         ),
