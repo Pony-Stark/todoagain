@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todoagain/screens/new_task_screen.dart';
-import 'screens/routing.dart';
+import 'screens/routing.dart' as routing;
+import 'sqlite.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SqliteDB.initDb();
   runApp(const MyApp());
 }
 
@@ -17,11 +20,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: const MyHomePage(),
+      initialRoute: routing.homeScreenID,
       routes: {
-        newTaskScreenID: (context) {
-          return const NewTaskScreen();
-        },
+        routing.newTaskScreenID: (context) => const NewTaskScreen(),
+        routing.homeScreenID: (context) => const MyHomePage(),
       },
     );
   }
@@ -37,13 +39,7 @@ class MyHomePage extends StatelessWidget {
         //onPressed: (){},
         child: const Icon(Icons.add, size: 35),
         onPressed: () {
-          /*Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return const NewTaskScreen();
-            }),
-          );*/
-          Navigator.pushNamed(context, newTaskScreenID);
+          Navigator.pushNamed(context, routing.newTaskScreenID);
         },
       ),
       appBar: AppBar(
