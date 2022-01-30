@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
       routes: {
         newTaskScreenID: (context) {
           return const NewTaskScreen();
@@ -35,7 +35,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         //onPressed: (){},
-        child: Icon(Icons.add, size: 35),
+        child: const Icon(Icons.add, size: 35),
         onPressed: () {
           /*Navigator.push(
             context,
