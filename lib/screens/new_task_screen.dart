@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:todoagain/task.dart';
 import 'package:todoagain/sqlite.dart';
 import 'routing.dart' as routing;
+import 'package:provider/provider.dart';
+import "package:todoagain/shared_data.dart";
 
 class NewTaskScreen extends StatefulWidget {
   NewTaskScreen({Key? key, this.task}) : super(key: key);
@@ -128,10 +130,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           size: 35,
         ),
         onPressed: () {
-          if (widget.task == null)
+          /*if (widget.task == null)
             saveNewTask();
           else
-            updateTask();
+            updateTask();*/
+          Provider.of<SharedData>(context, listen: false).incrementX();
+          Navigator.pop(context);
         },
       ),
       appBar: AppBar(
