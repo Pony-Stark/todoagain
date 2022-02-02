@@ -7,9 +7,9 @@ import 'sqlite.dart';
 import "package:todoagain/task.dart";
 import "package:todoagain/shared_data.dart";
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SqliteDB.initDb();
+  await SqliteDB.initDb();
   runApp(const MyApp());
 }
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => SharedData(),
+      create: (context) => TodosData(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
