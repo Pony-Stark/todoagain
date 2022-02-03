@@ -31,7 +31,8 @@ class _MyHomePageState extends State<MyHomePage> {
           body: () {
             {
               if (sd.isDataLoaded) {
-                var data = sd.activeTaskList;
+                var data = sd.activeTasks;
+                var listInfo = sd.activeListsByID;
                 List<Widget> children = [];
                 for (var task in data) {
                   children.add(ActivityCard(
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     date: task.deadlineDate == null
                         ? ""
                         : task.deadlineDate.toString(),
-                    list: task.taskListID.toString(),
+                    list: listInfo[task.taskListID]!.listName,
                     onTap: () {
                       Navigator.pushNamed(context, routing.newTaskScreenID,
                           arguments: task);

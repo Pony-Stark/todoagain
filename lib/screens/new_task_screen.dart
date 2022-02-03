@@ -19,7 +19,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       isFinished: false,
       isRepeating: false,
       taskName: "",
-      taskListID: 1,
+      taskListID: defaultListID,
       taskID: -1,
       parentTaskID: null,
       deadlineDate: null,
@@ -336,11 +336,61 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             Row(
               children: [
                 SizedBox(width: 10),
-                DropdownButton<String>(
-                  items: dropdownItemCreator(["Default"]),
-                  value: "Default",
-                  onChanged: (value) {},
+                Expanded(
+                  child:
+                      Consumer<TodosData>(builder: (context, todosData, child) {
+                    List<DropdownMenuItem<int>> menuItems = [];
+                    for (var taskList in todosData.activeListsByID.values) {
+                      menuItems.add(
+                        DropdownMenuItem<int>(
+                          child: Text(taskList.listName),
+                          value: taskList.listID,
+                        ),
+                      );
+                    }
+                    return DropdownButton<int>(
+                      isExpanded: true,
+                      items: menuItems,
+                      value: task.taskListID,
+                      onChanged: (value) {
+                        task.taskListID = value ?? task.taskListID;
+                        setState(() {});
+                      },
+                    );
+                  }),
                 ),
+                SizedBox(width: 5),
+                CustomIconButton(
+                    iconData: Icons.playlist_add,
+                    onPressed: () {
+                      String listName = "";
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Add a list"),
+                            content: TextField(
+                              onChanged: (value) {
+                                listName = value;
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Enter name of the list"),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Provider.of<TodosData>(context, listen: false)
+                                      .addList(listName);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }),
+                SizedBox(width: 5),
               ],
             ),
           ],

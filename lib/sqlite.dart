@@ -67,13 +67,13 @@ class SqliteDB {
   ///returns all taks whose isFinished is false
   static Future<List<Task>> getAllPendingTasks() async {
     var dbClient = await db;
-    List<Map<String, dynamic>> taskListFromDB =
+    List<Map<String, dynamic>> tasksFromDB =
         await dbClient.query("TASK", where: "isFinished = ?", whereArgs: [0]);
-    List<Task> taskListAsObjects = [];
-    for (var map in taskListFromDB) {
-      taskListAsObjects.add(Task.fromMap(map));
+    List<Task> tasksAsObjects = [];
+    for (var map in tasksFromDB) {
+      tasksAsObjects.add(Task.fromMap(map));
     }
-    return (taskListAsObjects);
+    return (tasksAsObjects);
   }
 
   static Future<bool> updateTask(Task task) async {
@@ -88,5 +88,26 @@ class SqliteDB {
     int changes = await dbClient
         .delete("TASK", where: "taskID = ?", whereArgs: [task.taskID]);
     return (changes == 1);
+  }
+
+  static Future<List<TaskList>> getAllActiveLists() async {
+    var dbClient = await db;
+    List<Map<String, dynamic>> taskListsFromDB =
+        await dbClient.query("LIST", where: "isActive = ?", whereArgs: [1]);
+    List<TaskList> taskListsAsObjects = [];
+    for (var map in taskListsFromDB) {
+      taskListsAsObjects.add(TaskList.fromMap(map));
+    }
+    return (taskListsAsObjects);
+  }
+
+  static Future<int?> insertList(Map<String, dynamic> listData) async {
+    var dbClient = await db;
+    int id = await dbClient.insert("LIST", listData);
+    if (id != 0) {
+      return (id);
+    } else {
+      return (null);
+    }
   }
 }
